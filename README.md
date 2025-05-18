@@ -14,7 +14,7 @@ Bu proje, Eric Zimmerman araçları ile toplanan adli verilerin analiz edilmesi 
 - `scripts/behavior_score.py`
 - `scripts/user_session_mapper.py`
 
-### 📊 Emir Keçeli – Raporlama & Dashboard
+### 📊 [Emir Keçeli](https://github.com/EmirKeceli) – Raporlama & Dashboard
 - `scripts/report_generator.py`
 - `web/dashboard.html`
 - `web/style.css`
