@@ -4,7 +4,7 @@ Bu proje, Eric Zimmerman araçları ile toplanan adli verilerin analiz edilmesi 
 
 ## 👥 Ekip Üyeleri ve Görev Dağılımı
 
-### 🔍 Zehra Kolsuz – MFT & Amcache Analizi
+### 🔍[Zehra Kolsuz](https://github.com/zehrakolsuz) – MFT & Amcache Analizi
 - `scripts/mft_parser.py`
 - `scripts/amcache_parser.py`
 - `scripts/file_activity_combiner.py`
