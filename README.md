@@ -9,12 +9,12 @@ Bu proje, Eric Zimmerman araçları ile toplanan adli verilerin analiz edilmesi 
 - `scripts/amcache_parser.py`
 - `scripts/file_activity_combiner.py`
 
-### 🧠 Emir Keçeli – Event Log & Sysmon Analizi
+### 🧠 Sena Zorver – Event Log & Sysmon Analizi
 - `scripts/event_log_parser.py`
 - `scripts/behavior_score.py`
 - `scripts/user_session_mapper.py`
 
-### 📊 Sena Zorver – Raporlama & Dashboard
+### 📊 Emir Keçeli – Raporlama & Dashboard
 - `scripts/report_generator.py`
 - `web/dashboard.html`
 - `web/style.css`
