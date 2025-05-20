@@ -1,6 +1,6 @@
 # 🕵️ Malware Davranış ve İz Analizi Aracı
 
-Bu proje, Eric Zimmerman araçları ile toplanan adli verilerin analiz edilmesi ve basit bir HTML dashboard ile raporlanmasını hedefler..
+Bu proje, Eric Zimmerman araçları ile toplanan adli verilerin analiz edilmesi ve basit bir HTML dashboard ile raporlanmasını hedefler.
 
 ## 👥 Ekip Üyeleri ve Görev Dağılımı
 
