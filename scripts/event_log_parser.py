@@ -12,7 +12,7 @@
 import re
 from typing import List, Dict
 
-# Her log satırını bu örneğe göre ayrıştıracağız:
+# Her log satırını ayrıştıracağız:
 # 2025-05-24 14:12:01 INFO User login: sena
 
 LOG_PATTERN = re.compile(r"(?P<date>\d{4}-\d{2}-\d{2}) (?P<time>\d{2}:\d{2}:\d{2}) (?P<level>[A-Z]+) (?P<message>.+)")
