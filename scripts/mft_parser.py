@@ -20,16 +20,14 @@ def parse_mft(file_path):
         return []
 
     mft_entries = []
-    offset = 0
-    while offset < len(mft_data):
+    for offset in range(0, len(mft_data), 1024):
         try:
             entry = parse_mft_entry(mft_data[offset:offset+1024])
             if entry:
                 mft_entries.append(entry)
         except Exception as e:
             logging.error(f"Error parsing MFT entry at offset {offset}: {e}")
-        offset += 1024
-
+        
     return mft_entries
     
 def parse_mft(file_path):
