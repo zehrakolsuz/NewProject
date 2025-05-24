@@ -1,16 +1,16 @@
 
 // Örnek veri setleri (gerçek verilerinizle değiştirin)
 const timelineData = [
-  { timestamp: '2025-05-24 10:00', program: 'notepad.exe', path: 'C:\\Windows\\notepad.exe' },
-  { timestamp: '2025-05-24 10:05', filename: 'suspicious.exe', path: 'C:\\Temp\\suspicious.exe' },
-  { timestamp: '2025-05-24 10:10', program: 'cmd.exe', path: 'C:\\Windows\\System32\\cmd.exe' }
+  {"timestamp": "2025-05-24 10:00", "program": "notepad.exe", "path": "C:\\Windows\\notepad.exe"},
+  {"timestamp": "2025-05-24 10:05", "filename": "suspicious.exe", "path": "C:\\Temp\\suspicious.exe"},
+  {"timestamp": "2025-05-24 10:10", "program": "cmd.exe", "path": "C:\\Windows\\System32\\cmd.exe"}
 ];
 
 const scoreData = [
-  { user_session: 'Oturum 1', behavior_score: 1 },
-  { user_session: 'Oturum 2', behavior_score: 2 },
-  { user_session: 'Oturum 3', behavior_score: 4 },
-  { user_session: 'Oturum 4', behavior_score: 3 }
+  {"user_session": "Oturum 1", "behavior_score": 1},
+  {"user_session": "Oturum 2", "behavior_score": 2},
+  {"user_session": "Oturum 3", "behavior_score": 4},
+  {"user_session": "Oturum 4", "behavior_score": 3}
 ];
 
 
@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('scoreChart').getContext('2d');
     const labels = scoreData.map(x => x.user_session);
     const scores = scoreData.map(x => x.behavior_score);
-    const colors = scores.map(s => s <= 1 ? '#4CAF50' : s <= 3 ? '#FFD700' : '#FF5252'); // Yeşil, Sarı, Kırmızı
+    const colors = scores.map(s => s <= 1 ? '#FFD1E3' : s <= 3 ? '#EBD3F8' : '#E3D095'); 
 
     new Chart(ctx, {
       type: 'bar',
@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
           label: 'Davranış Skoru',
           data: scores,
           backgroundColor: colors,
-          borderColor: '#7858A6',
+          borderColor: 'transparent',
           borderWidth: 2
         }]
       },
