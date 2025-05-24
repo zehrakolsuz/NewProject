@@ -193,5 +193,23 @@ def convert_windows_time(windows_time):
     epoch = datetime.datetime(1601, 1, 1)
     return epoch + datetime.timedelta(microseconds=windows_time/10)
 
+import unittest
+
+class TestMFTParser(unittest.TestCase):
+    def test_parse_mft_entry(self):
+        # Sample MFT entry data
+        entry_data = b'FILE' + b'\x00' * 44 + b'\x00' * 1024
+        entry = parse_mft_entry(entry_data)
+        self.assertIsNotNone(entry)
+        self.assertEqual(entry['signature'], 'FILE')
+
+    def test_parse_attribute(self):
+        # Sample attribute data
+        attribute_data = b'\x10\x00\x00\x00' + b'\x20\x00\x00\x00'  # $STANDARD_INFORMATION
+        attribute = parse_attribute(attribute_data)
+        self.assertEqual(attribute['type'], '$STANDARD_INFORMATION')
+        self.assertEqual(attribute['length'], 32)
+
 if __name__ == "__main__":
     pass
+    unittest.main()
