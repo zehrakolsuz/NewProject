@@ -26,47 +26,54 @@ def parse_mft(file_path):
     return mft_entries
 
 def parse_mft_entry(entry_data):
-if len(entry_data) < 48:
-        return None
+    try:
+        if len(entry_data) < 48:
+            return None
 
-    signature = entry_data[:4].decode('utf-8')
-    if signature != 'FILE':
-        return None
+        signature = entry_data[:4].decode('utf-8')
+        if signature != 'FILE':
+            return None
 
     # Parse the MFT entry
-    fixup_offset, fixup_size = struct.unpack_from('<HH', entry_data, 4)
-    lsn = struct.unpack_from('<Q', entry_data, 8)[0]
-    sequence_value = struct.unpack_from('<H', entry_data, 16)[0]
-    hard_link_count = struct.unpack_from('<H', entry_data, 18)[0]
-    first_attribute_offset = struct.unpack_from('<H', entry_data, 20)[0]
-    flags = struct.unpack_from('<H', entry_data, 22)[0]
-    used_size = struct.unpack_from('<I', entry_data, 24)[0]
-    allocated_size = struct.unpack_from('<I', entry_data, 28)[0]
-    base_record_reference = struct.unpack_from('<Q', entry_data, 32)[0]
-    next_attribute_id = struct.unpack_from('<H', entry_data, 40)[0]
-    mft_record_number = struct.unpack_from('<Q', entry_data, 48)[0]
+        fixup_offset, fixup_size = struct.unpack_from('<HH', entry_data, 4)
+        lsn = struct.unpack_from('<Q', entry_data, 8)[0]
+        sequence_value = struct.unpack_from('<H', entry_data, 16)[0]
+        hard_link_count = struct.unpack_from('<H', entry_data, 18)[0]
+        first_attribute_offset = struct.unpack_from('<H', entry_data, 20)[0]
+        flags = struct.unpack_from('<H', entry_data, 22)[0]
+        used_size = struct.unpack_from('<I', entry_data, 24)[0]
+        allocated_size = struct.unpack_from('<I', entry_data, 28)[0]
+        base_record_reference = struct.unpack_from('<Q', entry_data, 32)[0]
+        next_attribute_id = struct.unpack_from('<H', entry_data, 40)[0]
+        mft_record_number = struct.unpack_from('<Q', entry_data, 48)[0]
 
     # Parse attributes
-    attributes = []
-    offset = first_attribute_offset
-    while offset < used_size:
-        attribute_type = struct.unpack_from('<I', entry_data, offset)[0]
-        attribute_length = struct.unpack_from('<I', entry_data, offset+4)[0]
-        attribute = parse_attribute(entry_data[offset:offset+attribute_length])
-        if attribute:
-            attributes.append(attribute)
-        offset += attribute_length
+        attributes = []
+        offset = first_attribute_offset
+        while offset < used_size:
+            try:
+                attribute_type = struct.unpack_from('<I', entry_data, offset)[0]
+                attribute_length = struct.unpack_from('<I', entry_data, offset+4)[0]
+                attribute = parse_attribute(entry_data[offset:offset+attribute_length])
+                if attribute:
+                    attributes.append(attribute)
+            except Exception as e:
+                logging.error(f"Error parsing attribute at offset {offset}: {e}")
+            offset += attribute_length
 
     return {
-        'signature': signature,
-        'sequence_value': sequence_value,
-        'hard_link_count': hard_link_count,
-        'flags': flags,
-        'used_size': used_size,
-        'allocated_size': allocated_size,
-        'mft_record_number': mft_record_number,
-        'attributes': attributes
-    }
+            'signature': signature,
+            'sequence_value': sequence_value,
+            'hard_link_count': hard_link_count,
+            'flags': flags,
+            'used_size': used_size,
+            'allocated_size': allocated_size,
+            'mft_record_number': mft_record_number,
+            'attributes': attributes
+        }
+    except Exception as e:
+        logging.error(f"Error parsing MFT entry: {e}")
+        return None
 
 def parse_attribute(attribute_data):
     attribute_type = struct.unpack_from('<I', attribute_data, 0)[0]
