@@ -1,3 +1,4 @@
+
 // Örnek veri setleri (gerçek verilerinizle değiştirin)
 const timelineData = [
   { timestamp: '2025-05-24 10:00', program: 'notepad.exe', path: 'C:\\Windows\\notepad.exe' },
@@ -11,6 +12,7 @@ const scoreData = [
   { user_session: 'Oturum 3', behavior_score: 4 },
   { user_session: 'Oturum 4', behavior_score: 3 }
 ];
+
 
 window.addEventListener('DOMContentLoaded', () => {
   // Zaman Çizelgesi
