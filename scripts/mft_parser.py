@@ -16,7 +16,78 @@ def parse_mft(file_path):
     return mft_entries
 
 def parse_mft_entry(entry_data):
-    pass
+if len(entry_data) < 48:
+        return None
+
+    signature = entry_data[:4].decode('utf-8')
+    if signature != 'FILE':
+        return None
+
+    # Parse the MFT entry
+    fixup_offset, fixup_size = struct.unpack_from('<HH', entry_data, 4)
+    lsn = struct.unpack_from('<Q', entry_data, 8)[0]
+    sequence_value = struct.unpack_from('<H', entry_data, 16)[0]
+    hard_link_count = struct.unpack_from('<H', entry_data, 18)[0]
+    first_attribute_offset = struct.unpack_from('<H', entry_data, 20)[0]
+    flags = struct.unpack_from('<H', entry_data, 22)[0]
+    used_size = struct.unpack_from('<I', entry_data, 24)[0]
+    allocated_size = struct.unpack_from('<I', entry_data, 28)[0]
+    base_record_reference = struct.unpack_from('<Q', entry_data, 32)[0]
+    next_attribute_id = struct.unpack_from('<H', entry_data, 40)[0]
+    mft_record_number = struct.unpack_from('<Q', entry_data, 48)[0]
+
+    # Parse attributes
+    attributes = []
+    offset = first_attribute_offset
+    while offset < used_size:
+        attribute_type = struct.unpack_from('<I', entry_data, offset)[0]
+        attribute_length = struct.unpack_from('<I', entry_data, offset+4)[0]
+        attribute = parse_attribute(entry_data[offset:offset+attribute_length])
+        if attribute:
+            attributes.append(attribute)
+        offset += attribute_length
+
+    return {
+        'signature': signature,
+        'sequence_value': sequence_value,
+        'hard_link_count': hard_link_count,
+        'flags': flags,
+        'used_size': used_size,
+        'allocated_size': allocated_size,
+        'mft_record_number': mft_record_number,
+        'attributes': attributes
+    }
+
+def parse_attribute(attribute_data):
+    attribute_type = struct.unpack_from('<I', attribute_data, 0)[0]
+    attribute_length = struct.unpack_from('<I', attribute_data, 4)[0]
+    attribute_type_name = get_attribute_type_name(attribute_type)
+
+    return {
+        'type': attribute_type_name,
+        'length': attribute_length
+    }
+
+def get_attribute_type_name(attribute_type):
+    attribute_types = {
+        0x10: '$STANDARD_INFORMATION',
+        0x20: '$ATTRIBUTE_LIST',
+        0x30: '$FILE_NAME',
+        0x40: '$OBJECT_ID',
+        0x50: '$SECURITY_DESCRIPTOR',
+        0x60: '$VOLUME_NAME',
+        0x70: '$VOLUME_INFORMATION',
+        0x80: '$DATA',
+        0x90: '$INDEX_ROOT',
+        0xA0: '$INDEX_ALLOCATION',
+        0xB0: '$BITMAP',
+        0xC0: '$REPARSE_POINT',
+        0xD0: '$EA_INFORMATION',
+        0xE0: '$EA',
+        0xF0: '$PROPERTY_SET',
+        0x100: '$LOGGED_UTILITY_STREAM'
+    }
+    return attribute_types.get(attribute_type, 'UNKNOWN')
 
 if __name__ == "__main__":
     pass
