@@ -1,9 +1,37 @@
 # MFT Parser with Python by Zehra Kolsuz
 # Bu script, NTFS dosya sisteminin Master File Table (MFT)'sini ayrıştırır.
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Function to sanitize file paths
+def sanitize_path(path):
+    return os.path.abspath(os.path.normpath(path))
+
+# Use sanitized path in parse_mft function
+def parse_mft(file_path):
+    file_path = sanitize_path(file_path)
+    try:
+        with open(file_path, 'rb') as f:
+            mft_data = f.read()
+    except IOError as e:
+        logging.error(f"Error reading file {file_path}: {e}")
+        return []
+
+    mft_entries = []
+    offset = 0
+    while offset < len(mft_data):
+        try:
+            entry = parse_mft_entry(mft_data[offset:offset+1024])
+            if entry:
+                mft_entries.append(entry)
+        except Exception as e:
+            logging.error(f"Error parsing MFT entry at offset {offset}: {e}")
+        offset += 1024
+
+    return mft_entries
+    
 def parse_mft(file_path):
     try:
         with open(file_path, 'rb') as f:
