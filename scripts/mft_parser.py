@@ -60,6 +60,12 @@ def parse_mft_entry(entry_data):
             try:
                 attribute_type = struct.unpack_from('<I', entry_data, offset)[0]
                 attribute_length = struct.unpack_from('<I', entry_data, offset+4)[0]
+                if attribute_length == 0:
+                    logging.error(f"Invalid attribute length at offset {offset}")
+                    break
+                if offset + attribute_length > used_size:
+                    logging.error(f"Attribute length exceeds used size at offset {offset}")
+                    break
                 attribute = parse_attribute(entry_data[offset:offset+attribute_length])
                 if attribute:
                     attributes.append(attribute)
