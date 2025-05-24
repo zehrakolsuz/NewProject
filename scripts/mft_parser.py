@@ -209,7 +209,27 @@ class TestMFTParser(unittest.TestCase):
         attribute = parse_attribute(attribute_data)
         self.assertEqual(attribute['type'], '$STANDARD_INFORMATION')
         self.assertEqual(attribute['length'], 32)
-
+def print_mft_entry(entry):
+    print(f"Signature: {entry['signature']}")
+    print(f"Sequence Value: {entry['sequence_value']}")
+    print(f"Hard Link Count: {entry['hard_link_count']}")
+    print(f"Flags: {entry['flags']}")
+    print(f"Used Size: {entry['used_size']}")
+    print(f"Allocated Size: {entry['allocated_size']}")
+    print(f"MFT Record Number: {entry['mft_record_number']}")
+    print("Attributes:")
+    for attribute in entry['attributes']:
+        print(f"  - Type: {attribute['type']}, Length: {attribute['length']}")
+        
 if __name__ == "__main__":
-    pass
+    if len(sys.argv) < 2:
+        print("Usage: python mft_parser.py <path_to_mft_file>")
+        sys.exit(1)
+
+    mft_file_path = sys.argv[1]
+    mft_entries = parse_mft(mft_file_path)
+
+    for entry in mft_entries:
+        print_mft_entry(entry)
+ 
     unittest.main()
