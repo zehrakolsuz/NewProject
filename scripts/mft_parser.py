@@ -1,5 +1,8 @@
 # MFT Parser with Python by Zehra Kolsuz
 # Bu script, NTFS dosya sisteminin Master File Table (MFT)'sini ayrıştırır.
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def parse_mft(file_path):
     try:
