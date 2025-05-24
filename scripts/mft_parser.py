@@ -89,5 +89,52 @@ def get_attribute_type_name(attribute_type):
     }
     return attribute_types.get(attribute_type, 'UNKNOWN')
 
+def parse_standard_information(attribute_data):
+    creation_time = struct.unpack_from('<Q', attribute_data, 24)[0]
+    modification_time = struct.unpack_from('<Q', attribute_data, 32)[0]
+    mft_modification_time = struct.unpack_from('<Q', attribute_data, 40)[0]
+    access_time = struct.unpack_from('<Q', attribute_data, 48)[0]
+
+    return {
+        'type': '$STANDARD_INFORMATION',
+        'creation_time': convert_windows_time(creation_time),
+        'modification_time': convert_windows_time(modification_time),
+        'mft_modification_time': convert_windows_time(mft_modification_time),
+        'access_time': convert_windows_time(access_time)
+    }
+
+def parse_file_name(attribute_data):
+    parent_directory = struct.unpack_from('<Q', attribute_data, 24)[0]
+    creation_time = struct.unpack_from('<Q', attribute_data, 32)[0]
+    modification_time = struct.unpack_from('<Q', attribute_data, 40)[0]
+    mft_modification_time = struct.unpack_from('<Q', attribute_data, 48)[0]
+    access_time = struct.unpack_from('<Q', attribute_data, 56)[0]
+    allocated_size = struct.unpack_from('<Q', attribute_data, 64)[0]
+    real_size = struct.unpack_from('<Q', attribute_data, 72)[0]
+    file_flags = struct.unpack_from('<I', attribute_data, 80)[0]
+    name_length = struct.unpack_from('<B', attribute_data, 84)[0]
+    name_type = struct.unpack_from('<B', attribute_data, 85)[0]
+    file_name = attribute_data[86:86+name_length*2].decode('utf-16le')
+
+    return {
+        'type': '$FILE_NAME',
+        'parent_directory': parent_directory,
+        'creation_time': convert_windows_time(creation_time),
+        'modification_time': convert_windows_time(modification_time),
+        'mft_modification_time': convert_windows_time(mft_modification_time),
+        'access_time': convert_windows_time(access_time),
+        'allocated_size': allocated_size,
+        'real_size': real_size,
+        'file_flags': file_flags,
+        'name_length': name_length,
+        'name_type': name_type,
+        'file_name': file_name
+    }
+
+def convert_windows_time(windows_time):
+    # Windows time is in 100-nanosecond intervals since January 1, 1601 (UTC)
+    epoch = datetime.datetime(1601, 1, 1)
+    return epoch + datetime.timedelta(microseconds=windows_time/10)
+
 if __name__ == "__main__":
     pass
