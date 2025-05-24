@@ -2,15 +2,22 @@
 # Bu script, NTFS dosya sisteminin Master File Table (MFT)'sini ayrıştırır.
 
 def parse_mft(file_path):
-    with open(file_path, 'rb') as f:
-        mft_data = f.read()
+    try:
+        with open(file_path, 'rb') as f:
+            mft_data = f.read()
+    except IOError as e:
+        logging.error(f"Error reading file {file_path}: {e}")
+        return []
 
     mft_entries = []
     offset = 0
     while offset < len(mft_data):
-        entry = parse_mft_entry(mft_data[offset:offset+1024])
-        if entry:
-            mft_entries.append(entry)
+        try:
+            entry = parse_mft_entry(mft_data[offset:offset+1024])
+            if entry:
+                mft_entries.append(entry)
+        except Exception as e:
+        logging.error(f"Error parsing MFT entry at offset {offset}: {e}")
         offset += 1024
 
     return mft_entries
