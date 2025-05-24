@@ -35,17 +35,23 @@ def parse_mft_entry(entry_data):
             return None
 
     # Parse the MFT entry
-        fixup_offset, fixup_size = struct.unpack_from('<HH', entry_data, 4)
-        lsn = struct.unpack_from('<Q', entry_data, 8)[0]
-        sequence_value = struct.unpack_from('<H', entry_data, 16)[0]
-        hard_link_count = struct.unpack_from('<H', entry_data, 18)[0]
-        first_attribute_offset = struct.unpack_from('<H', entry_data, 20)[0]
-        flags = struct.unpack_from('<H', entry_data, 22)[0]
-        used_size = struct.unpack_from('<I', entry_data, 24)[0]
-        allocated_size = struct.unpack_from('<I', entry_data, 28)[0]
-        base_record_reference = struct.unpack_from('<Q', entry_data, 32)[0]
-        next_attribute_id = struct.unpack_from('<H', entry_data, 40)[0]
-        mft_record_number = struct.unpack_from('<Q', entry_data, 48)[0]
+    fixup_offset, fixup_size = struct.unpack_from('<HH', entry_data, 4)
+    if fixup_size > 0:
+        fixup_array = entry_data[fixup_offset:fixup_offset+fixup_size*2]
+        for i in range(0, len(fixup_array), 2):
+            if entry_data[512+i] != fixup_array[i] or entry_data[512+i+1] != fixup_array[i+1]:
+                logging.error(f"Fixup check failed at offset {512+i}")
+                return None
+    lsn = struct.unpack_from('<Q', entry_data, 8)[0]
+    sequence_value = struct.unpack_from('<H', entry_data, 16)[0]
+    hard_link_count = struct.unpack_from('<H', entry_data, 18)[0]
+    first_attribute_offset = struct.unpack_from('<H', entry_data, 20)[0]
+    flags = struct.unpack_from('<H', entry_data, 22)[0]
+    used_size = struct.unpack_from('<I', entry_data, 24)[0]
+    allocated_size = struct.unpack_from('<I', entry_data, 28)[0]
+    base_record_reference = struct.unpack_from('<Q', entry_data, 32)[0]
+    next_attribute_id = struct.unpack_from('<H', entry_data, 40)[0]
+    mft_record_number = struct.unpack_from('<Q', entry_data, 48)[0]
 
     # Parse attributes
         attributes = []
