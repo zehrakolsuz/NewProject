@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malware Davranış ve İz Analizi Paneli</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <i class="fas fa-shield-alt"></i>
+      <h1>Malware Davranış ve İz Analizi Paneli</h1>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <div class="container">
+      <span>Gösterge Paneli</span>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="card">
+      <h2>Dosya Zaman Çizelgesi</h2>
+      <ul id="timeline-list" class="timeline">
+        <!-- JavaScript ile dinamik olarak doldurulacak -->
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Kullanıcı Oturum Skorları</h2>
+      <div class="chart-container">
+        <canvas id="scoreChart"></canvas>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Detaylı Analiz</h2>
+      <div class="analysis-box">
+        <p>Kullanıcı davranışlarına dair detaylı analizler burada yer alacaktır. JSON verisi ve grafiklerle desteklenmiş veri görselleştirmesi sağlanacaktır.</p>
+        <pre id="json-visualization"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Siber Güvenlik Gösterge Paneli</p>
+    </div>
+  </footer>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
